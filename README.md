@@ -6,15 +6,22 @@
 3. [Скриншоты](#скриншоты)
 
 ## Установка и запуск проекта
-
+### Docker
+1. Внутри директории `puddletest` выполним следующую команду в терминале.
+   ```bash
+   docker compose up --build
+   ```
+2. Сервер будет доступен по адрессу: http://localhost:8000/
+### Poetry
+>Убедитесь, что у вас установлена версия Python 3.12 или выше. (`python --version`)
 1. **Клонируйте репозиторий**
    ```bash
-   git clone https://github.com/DmitryAce/django_projects/
+   git clone https://github.com/DmitryAce/puddletest/
    ```
 
 2. **Перейдите в папку проекта**
    ```bash
-   cd django_projects/puddle
+   cd puddletest/
    ```
 
 3. **Установите Poetry** (если он еще не установлен)
