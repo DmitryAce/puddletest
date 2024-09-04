@@ -6,17 +6,25 @@
 <div class="container mx-auto">
     <h1 class="mb-6 mt-6 text-3xl">Чат</h1>
 
+    {% with request.user as current_user %}
     <div class="space-y-6">
 
         {% for message in conversation.messages.all %}
-            <div class="p-6 flex {% if message.created_by == request.user %}bg-blue-100{% else %}bg-white{% endif %} rounded-xl">
+            <div class="p-6 flex {% if message.created_by == current_user %}bg-blue-100{% else %}bg-white{% endif %} rounded-xl">
                 <div>
-                    <p class="mb-4"><strong>{{ message.created_by.username }}</strong> @ {{ message.created_at }}</p>
+                    {% if message.created_by == current_user %}
+                        <!-- Меняем имена местами -->
+                        <p class="mb-4"><strong>{{ conversation.recipient.username }}</strong> @ {{ message.created_at }}</p>
+                    {% else %}
+                        <p class="mb-4"><strong>{{ current_user.username }}</strong> @ {{ message.created_at }}</p>
+                    {% endif %}
                     <p>{{ message.content }}</p>
                 </div>
             </div>
         {% endfor %}
     </div>
+    {% endwith %}
+
 
     <form method="post" action="{% url 'conversation:detail' pk=conversation.pk %}" class="mt-6">
         {% csrf_token %}

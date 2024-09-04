@@ -1,7 +1,7 @@
 {% extends "core/base.html" %}
 
 {% block title %}Items{% endblock title %}
-
+{% load static %}
 {% block content %}
     <div class="grid grid-cols-4 gap-4 container mx-auto">
         <div class="col-span-1">
@@ -14,20 +14,23 @@
 
             <p class="font-semibold pl-2 text-2xl">Категории</p>
 
-            <ul class="pl-2">
-                {% for category in categories %}
-                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
-                        <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{% if category.id == category_id %}➤{% endif %}{{ category.name }}</a>
-                    </li>
-                {% endfor %}
-            </ul>
+            {% if items %}
+                <ul class="pl-2">
+                    {% for category in categories %}
+                        <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                            <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{% if category.id == category_id %}➤{% endif %}{{ category.name }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            
 
             <hr class="my-6">
 
             <p class="font-semibold pl-2 text-2xl">Очистить фильтры</p>
             <ul class="pl-2">
                 <li>
-                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block bg-gray-500 text-white rounded-xl text-lg hover:bg-gray-700">Очистить</a>
+                    <a href="{% url 'item:itemsC' 'clean' %}" class="mt-2 py-4 px-8 inline-block bg-gray-500 text-white rounded-xl text-lg hover:bg-gray-700">Очистить</a>
                 </li>
             </ul>
         </div>
@@ -35,18 +38,33 @@
         <div class="col-span-3 pt-2 pr-2">
             <div class="grid grid-cols-3 gap-3 flash-animate">
                 {% for item in items %}
-                <div>
-                    <a href="{% url 'item:detail' item.id %}">
+                    {% if category_id == 3 %}
                         <div>
-                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                            <a href="https://contract.gosuslugi.ru/">
+                                <div>
+                                    <img src="{% static "img/svo.jpg" %}" class="rounded-t-xl">
+                                </div>
+            
+                                <div class="p-6 bg-white rounded-b-xl">
+                                    <h2 class="text-2xl truncate">Присоединяйся к своим!</h2> 
+                                    <p class="text-gray-500 pt-4">Надо было сдать экзамен((</p>
+                                </div>
+                            </a>
                         </div>
-    
-                        <div class="p-6 bg-white rounded-b-xl">
-                            <h2 class="text-2xl truncate">{{ item.name }}</h2> 
-                            <p class="text-gray-500 pt-4">Цена: {{ item.price|floatformat:0 }} ₽</p>
+                    {% else %}
+                        <div>
+                            <a href="{% url 'item:detail' item.id %}">
+                                <div>
+                                    <img src="{{ item.image.url }}" class="rounded-t-xl">
+                                </div>
+            
+                                <div class="p-6 bg-white rounded-b-xl">
+                                    <h2 class="text-2xl truncate">{{ item.name }}</h2> 
+                                    <p class="text-gray-500 pt-4">Цена: {{ item.price|floatformat:0 }} ₽</p>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                </div>
+                    {% endif %}
                 {% endfor %}
             </div>
         </div>

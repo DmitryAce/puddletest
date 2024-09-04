@@ -188,3 +188,39 @@ def category(request, pk):
         'categoryName': categoryName,
         'categoryname': categoryname,
     })
+    
+
+@swagger_auto_schema(
+    method='get',
+    manual_parameters=[
+        openapi.Parameter('query', openapi.IN_QUERY, description="Search query", type=openapi.TYPE_STRING),
+        openapi.Parameter('category', openapi.IN_QUERY, description="Category ID", type=openapi.TYPE_INTEGER),
+    ],
+    responses={
+        200: item_list_response,
+        400: openapi.Response(description="Invalid input"),
+    },
+    operation_summary="Get a list of items",
+    operation_description="Retrieve a list of items that match the search query and category ID. Returns a list of items with their details.",
+    tags=['Items']
+)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def itemsC(request, clean):
+    query = request.GET.get('query', '')
+    category_id = request.GET.get('category', 0)
+    categories = Category.objects.all()
+    items = Item.objects.filter(is_sold=True)
+    
+    if category_id:
+        items = items.filter(category_id=category_id)
+    
+    if query:
+        items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    
+    return render(request, 'item/items.html', {
+        'items': items,
+        'query': query,
+        'categories': categories,
+        'category_id': int(category_id),
+    })

@@ -1,18 +1,23 @@
 {% extends 'core/base.html' %}
 
 {% block title %}{{ item.name }}{% endblock %}
-
+{% load static %}
 {% block content %}
 <div class="container mx-auto">
     <div class="mt-4 flex gap-6 items-center w-full">
         <div class="basis-[60%] shrink-1 grow-0">
-            <img src="{{ item.image.url }}" class="rounded-xl max-w-[500px]">
+            <img src='{% static "img/dzerj.jpg" %}' class="rounded-xl max-w-[500px]">
         </div>
 
         <div class="basis-[40%] shrink-1 grow-0 p-6 bg-gray-100 rounded-xl">
             <h1 class="mb-6 text-3xl">{{ item.name }}</h1>
             <p class="text-gray-500 pt-4">Цена: {{ item.price|floatformat:0 }} ₽</p>
-            <p class="text-gray-500"><strong>Продавец: </strong>{{ item.created_by.username }}</p>
+            {% if user.is_authenticated %}
+                <p class="text-gray-500"><strong>Продавец: </strong>{{ user.username }}</p>
+            {% else %}
+                <p class="text-gray-500"><strong>Продавец: </strong>none</p>
+            {% endif %}
+            
 
 
             {% if item.description %}
@@ -50,7 +55,7 @@
         <div class="grid grid-cols-3 gap-3 flash-animate">
             {% for item in related_items %}
             <div>
-                <a href="{% url 'item:detail' item.id %}">
+                <a href="{% url 'core:index' %}">
                     <div>
                         <img src="{{ item.image.url }}" class="rounded-t-xl w-full">
                     </div>

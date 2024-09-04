@@ -5,6 +5,7 @@ app_name = 'item'
 
 urlpatterns = [
     path('', views.items, name='items'),
+    path('<str:clean>', views.itemsC, name='itemsC'),
     path('new/', views.new, name='new'),
     path('category/<int:pk>/', views.category, name='category'),
     path('<int:pk>/', views.detail, name='detail'),
